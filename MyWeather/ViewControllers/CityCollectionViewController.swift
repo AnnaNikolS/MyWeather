@@ -75,6 +75,7 @@ final class CityCollectionViewController: UICollectionViewController {
         let minTemp = Int(weatherData.main.tempMin.rounded())
         cell.cityMinMaxTemperatureLabel.text = "Макс.: \(maxTemp)°, мин.: \(minTemp)°"
         cell.cityTemperatureLabel.text = String(Int(weatherData.main.temp.rounded())) + "°"
+        
         cell.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.15)
         cell.layer.borderWidth = 1
         cell.layer.borderColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.4).cgColor
