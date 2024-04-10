@@ -6,7 +6,12 @@
 //
 
 import Foundation
-import Alamofire
+
+enum NetworkError: Error {
+    case invalidURL
+    case noData
+    case decodingError
+}
 
 final class NetworkManager {
     
@@ -14,8 +19,7 @@ final class NetworkManager {
     
     private init() {}
     
-    
-    func fetchWeather(for cityUrl: [String], completion: @escaping ([City]) -> Void) {
+    func fetchWeather(for cityUrl: [String], completion: @escaping (Result<[City], NetworkError>) -> Void) {
         
         let group = DispatchGroup()
         var weatherData = [City]()
@@ -23,43 +27,32 @@ final class NetworkManager {
         for url in cityUrl {
             group.enter()
             
-            AF.request(url).responseJSON { response in
-                guard let data = response.data else { return }
+            guard let url = URL(string: url) else {
+                completion(.failure(.invalidURL))
+                return
+            }
+            
+            URLSession.shared.dataTask(with: url) { data, _, error in
+       
+                guard let data else {
+                    completion(.failure(.noData))
+                    print(error?.localizedDescription ?? "No error description")
+                    return
+                }
+                
                 do {
                     let cityModel = try JSONDecoder().decode(City.self, from: data)
                     weatherData.append(cityModel)
                     group.leave()
                 } catch {
-                    print("Error decoding JSON: \(error)")
+                    completion(.failure(.decodingError))
                 }
-            }
+            }.resume()
         }
         group.notify(queue: .main) {
-            completion(weatherData)
+            completion(.success(weatherData))
         }
     }
 }
-    
-//    func performRequest(withCity city: URL, completion: @escaping (Result<City, AFError>) -> Void) {
-        
-            // Метод для получения данных о погоде для всех городов
-//            func fetchWeatherData(for cities: [String]) -> Result<[City]> {
-//                return Promise { fulfill, reject in
-//                    let requests = cities.map { city in
-//                        AF.request($0).responseDecodable(of: City.self) { response in
-//                            switch response.result {
-//                            case .success(let model):
-//                                fulfill([model])
-//                            case .failure(let error):
-//                                reject(error)
-//                            }
-//                        }
-//                    }
-//                    
-//                    // Ожидаем завершения всех запросов
-//                    Promise.all(requests).sink { _ in } receiveValue: { _ in }
-//                }
-//            }
-//        }
-        
+
     
