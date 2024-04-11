@@ -8,13 +8,6 @@
 import UIKit
 
 extension UIView {
-//    func putGradient() {
-//        let gradientLogInView = CAGradientLayer()
-//        gradientLogInView.frame = bounds
-//        gradientLogInView.colors = [UIColor.black.cgColor, UIColor.mintWeatherDark.cgColor]
-//        gradientLogInView.locations = [0.25, 1.0]
-//        layer.insertSublayer(gradientLogInView, at: 0)
-//    }
     
     func putGradientCollectionVC() {
         let gradientView = CAGradientLayer()
@@ -22,6 +15,11 @@ extension UIView {
         gradientView.colors = [UIColor.mintWeatherDark.cgColor, UIColor.systemBlue.cgColor, UIColor.blueWeather.cgColor]
         gradientView.locations = [0.1, 0.5, 1.0]
         layer.insertSublayer(gradientView, at: 0)
+    }
+    
+    func putBackground() {
+        let image = UIImage(named: "back2")
+        backgroundColor = UIColor(patternImage: image!)
     }
 }
 

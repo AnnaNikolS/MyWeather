@@ -15,9 +15,9 @@ final class CityCollectionViewController: UICollectionViewController {
     // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.putGradientCollectionVC()
         collectionView.backgroundColor = .clear
         fetchData()
+        view.putBackground()
     }
     
     // MARK: - UICollectionViewDataSource
@@ -44,10 +44,15 @@ final class CityCollectionViewController: UICollectionViewController {
         cell.cityMinMaxTemperatureLabel.text = "Макс.: \(maxTemp)°, мин.: \(minTemp)°"
         cell.cityTemperatureLabel.text = String(Int(weatherData.main.temp.rounded())) + "°"
         
-        cell.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.15)
+        cell.backgroundColor = .clear
         cell.layer.borderWidth = 0.75
         cell.layer.borderColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.3).cgColor
         cell.layer.cornerRadius = 20
+        
+        let blur = UIBlurEffect(style: .dark)
+        let blurView = UIVisualEffectView(effect: blur)
+        blurView.frame = cell.bounds
+        cell.backgroundView = blurView
         
         return cell
     }
@@ -74,7 +79,7 @@ extension CityCollectionViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
-// MARK: - Networking 
+// MARK: - Networking
 extension CityCollectionViewController {
     func fetchData() {
         NetworkManager.shared.fetchWeather(for: cityLink) { models in
@@ -88,5 +93,7 @@ extension CityCollectionViewController {
         }
     }
 }
+
+
 
 

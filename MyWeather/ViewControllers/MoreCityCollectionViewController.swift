@@ -22,7 +22,7 @@ final class MoreCityCollectionViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.backgroundColor = .clear
-        view.putGradientCollectionVC()
+        view.putBackground()
     }
     
     // MARK: - UICollectionViewDataSource
@@ -56,9 +56,6 @@ final class MoreCityCollectionViewController: UICollectionViewController {
                             String(describing: "\(cities?.main.humidity ?? 0)%"),
                             String(describing: pressure)]
         self.isDataLoaded = true
-        DispatchQueue.main.async {
-            self.collectionView.reloadData()
-        }
         
         if self.isDataLoaded && self.weatherData.indices.contains(indexPath.item) {
             cell.dataLabel.text = self.weatherData[indexPath.item]
@@ -66,15 +63,20 @@ final class MoreCityCollectionViewController: UICollectionViewController {
             cell.dataLabel.text = "-"
         }
         
-        cell.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.15)
+        cell.backgroundColor = .clear
         cell.layer.borderWidth = 0.75
         cell.layer.borderColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.3).cgColor
         cell.layer.cornerRadius = 20
         
+        let blur = UIBlurEffect(style: .dark)
+        let blurView = UIVisualEffectView(effect: blur)
+        blurView.frame = cell.bounds
+        cell.backgroundView = blurView
+        
         return cell
     }
-    
 }
+
 // MARK: - UICollectionViewDelegateFlowLayout
 extension MoreCityCollectionViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
