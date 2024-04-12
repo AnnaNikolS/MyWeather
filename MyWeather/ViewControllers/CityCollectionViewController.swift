@@ -40,6 +40,9 @@ final class CityCollectionViewController: UICollectionViewController {
         if weatherData.name == "Новая Голландия" {
             cell.cityNameLabel.text = "Санкт-Петербург"
         }
+        if weatherData.name == "Соболевка" {
+            cell.cityNameLabel.text = "Сочи"
+        }
         cell.cityDescriptionLabel.text = weatherData.weather.map { $0.description }.formatted()
         cell.cityMinMaxTemperatureLabel.text = "Макс.: \(maxTemp)°, мин.: \(minTemp)°"
         cell.cityTemperatureLabel.text = String(Int(weatherData.main.temp.rounded())) + "°"
